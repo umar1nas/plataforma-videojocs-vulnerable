@@ -1,0 +1,1 @@
+mysqldump -uplataforma_user -p123456789a plataforma_videojocs  > backupbdd.sql 
