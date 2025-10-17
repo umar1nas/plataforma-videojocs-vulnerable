@@ -1,7 +1,14 @@
 <?php
-// Simulamos usuarios y juegos (en producción vendría de una BD)
+session_start();
+if (!isset($_SESSION['usuario'])) {
+    header('Location: ../index.php'); // o donde esté el login
+    exit;
+}
+
+$nombreUsuario = ucfirst($_SESSION['usuario']); // 🔹 Convierte la primera letra en mayúscula
+
 $usuario = [
-    'nombre' => 'Juan Pérez',
+    'nombre' => $nombreUsuario,
     'avatar' => '👤'
 ];
 
@@ -50,7 +57,7 @@ $juegos = [
                 </div>
                 <div class="profile-options">
                     <a href="perfil.php" class="profile-option">⚙️ Perfil</a>
-                    <a href="#" class="profile-option logout">🚪 Cerrar Sesión</a>
+                    <a href="logout.php" class="profile-option logout">🚪 Cerrar Sesión</a>
                 </div>
             </div>
         </header>

@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (isset($_SESSION['usuario'])) {
+    header('Location: ./backend/plataforma.php'); // o donde esté el login
+    exit;
+}
+?>
 <!doctype html>
 <html lang="es">
 <head>

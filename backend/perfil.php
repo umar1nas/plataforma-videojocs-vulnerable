@@ -1,3 +1,33 @@
+<?php
+session_start();
+if (!isset($_SESSION['usuario'])) {
+    header('Location: ../index.php');
+    exit;
+}
+
+require "./include/db_mysqli.php";
+
+$usuario = $_SESSION['usuario'];
+
+// Consulta para obtener todos los datos del usuario
+$sql = "SELECT * FROM usuaris WHERE nom_usuari = '$usuario'";
+$result = $conn->query($sql);
+
+if ($result && $result->num_rows > 0) {
+    $usuari = $result->fetch_assoc();
+    $foto = htmlspecialchars($usuari['foto_perfil']); // 🔹 La ruta viene directamente de la BD
+    $nombreCompleto = htmlspecialchars($usuari['nom_complet']);
+    $email = htmlspecialchars($usuari['email']);
+    $fecha = htmlspecialchars($usuari['data_registre']);
+} else {
+    // Si no se encuentra el usuario, redirigimos
+    header('Location: ../error_inicio.php');
+    exit;
+}
+
+$conn->close();
+?>
+
 <!doctype html>
 <html lang="es">
 <head>
@@ -6,15 +36,15 @@
   <title>Perfil de Usuario</title>
   <style>
     :root {
-      --bg: #0F172A; /* Fondo oscuro */
-      --card-bg: #1E293B; /* Gris azulado oscuro */
-      --text-light: #F1F5F9; /* Texto claro */
-      --text-muted: #E2E8F0; /* Gris claro */
-      --accent-from: #A855F7; /* Morado degradado inicio */
-      --accent-to: #7C3AED;   /* Morado degradado final */
-      --button: #8B5CF6; /* Violeta suave */
-      --highlight: #10B981; /* Verde (ícono de rombo) */
-      --pink: #D946EF; /* Rosa/Morado botón */
+      --bg: #0F172A;
+      --card-bg: #1E293B;
+      --text-light: #F1F5F9;
+      --text-muted: #E2E8F0;
+      --accent-from: #A855F7;
+      --accent-to: #7C3AED;
+      --button: #8B5CF6;
+      --highlight: #10B981;
+      --pink: #D946EF;
     }
 
     * { box-sizing: border-box; }
@@ -110,25 +140,25 @@
 
   <div class="card">
     <div class="card__hero">
-      <img src="./fotos/default.png" alt="Foto de usuario" class="avatar" />
-      <h1 class="hero__title">maria</h1>
-      <div class="hero__sub">Miembro desde: 2024-05-20</div>
+      <img src="<?php echo $foto; ?>" alt="Foto de usuario" class="avatar" />
+      <h1 class="hero__title"><?php echo $usuario; ?></h1>
+      <div class="hero__sub">Miembro desde: <?php echo $fecha; ?></div>
     </div>
 
     <div class="card__body">
       <div class="field">
         <label class="label">Nombre completo</label>
-        <div class="value">Maria Gómez</div>
+        <div class="value"><?php echo $nombreCompleto; ?></div>
       </div>
 
       <div class="field">
         <label class="label">Nombre de usuario</label>
-        <div class="value">maria</div>
+        <div class="value"><?php echo $usuario; ?></div>
       </div>
 
       <div class="field">
         <label class="label">Email</label>
-        <div class="value">maria@ejemplo.com</div>
+        <div class="value"><?php echo $email; ?></div>
       </div>
 
       <div style="text-align:center;">

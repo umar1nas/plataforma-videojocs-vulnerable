@@ -1,17 +1,3 @@
--- SCRIPT PER AUTOMATITZAR LA CREACIÓ DE LA BASE DE DADES DEL PROJECTE
-
--- Crear la base de dades
-CREATE DATABASE plataforma_videojocs CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- Crear un usuari insegur per l'aplicació
-CREATE USER 'plataforma_user'@'%' IDENTIFIED BY '123456789a';
-
--- Concedir tots els privilegis a la base de dades i de manera global (vulnerable)
-GRANT ALL PRIVILEGES ON *.* TO 'plataforma_user'@'%' WITH GRANT OPTION;
-
--- Aplicar els canvis
-FLUSH PRIVILEGES;
-
 -- Seleccionar la base de dades
 USE plataforma_videojocs;
 

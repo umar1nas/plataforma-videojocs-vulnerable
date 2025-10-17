@@ -158,7 +158,7 @@
       <h1 class="hero__title">Crear cuenta</h1>
     </div>
 
-    <form action="verificar_registro.php" method="post">
+    <form action="backend/crear_usuario.php" method="post">
       <div>
         <label for="nombre">Nombre completo</label>
         <input type="text" id="nombre" name="nombre" placeholder="Tu nombre completo" required>

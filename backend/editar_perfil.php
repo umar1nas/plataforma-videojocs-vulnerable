@@ -183,7 +183,7 @@
       <div class="avatar-preview">
         <img id="avatarImg" src="./fotos/default.png" alt="Avatar del usuario">
         <label for="avatar" style="font-size:13px;color:var(--text-muted)">Cambiar imagen</label>
-        <input type="file" id="avatar" name="avatar" accept="image/*">
+        <input type="file" id="avatar" name="avatar" accept="fotos/">
       </div>
 
       <div>

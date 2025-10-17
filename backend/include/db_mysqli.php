@@ -13,5 +13,3 @@ $conn = new mysqli($host, $user, $password, $database);
 if ($conn->connect_error) {
     die("Error de connexió: " . $conn->connect_error);
 }
-
-echo "La connexió a la BD s'ha realitzat amb èxit! ";
