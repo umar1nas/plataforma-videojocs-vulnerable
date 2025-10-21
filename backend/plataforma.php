@@ -17,8 +17,8 @@ $juegos = [
     ['id' => 2, 'nombre' => 'Pong', 'emoji' => '🧠', 'url' => 'joc/2/pong.php'],
     ['id' => 3, 'nombre' => 'Trivia Quest', 'emoji' => '🎯', 'url' => 'juegos/trivia.php'],
     ['id' => 4, 'nombre' => 'Snake Attack', 'emoji' => '🐍', 'url' => 'joc/3/snake.php'],
-    ['id' => 5, 'nombre' => 'Flappy Bird', 'emoji' => '🐦', 'url' => 'juegos/flappy.php'],
-    ['id' => 6, 'nombre' => '2048', 'emoji' => '🎮', 'url' => 'juegos/2048.php']
+    ['id' => 5, 'nombre' => 'Flappy Bird', 'emoji' => '🐦', 'url' => 'joc/4/flappybird.php'],
+    ['id' => 6, 'nombre' => '2048', 'emoji' => '🎮', 'url' => 'joc/5/2048.php']
 ];
 
 ?>
@@ -35,7 +35,7 @@ $juegos = [
     <div class="container">
         <!-- BOTÓN RANKING (IZQUIERDA) -->
         <aside class="ranking-sidebar">
-            <a href="ranking.php" class="ranking-btn" title="Ver Ranking Completo">
+            <a href="new_ranking.php" class="ranking-btn" title="Ver Ranking Completo">
                 🏆
             </a>
         </aside>

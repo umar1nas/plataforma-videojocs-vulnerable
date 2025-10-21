@@ -201,6 +201,11 @@
         <input type="email" id="email" name="email" placeholder="ejemplo@correo.com" >
       </div>
 
+       <div>
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" name="password" placeholder="Nueva contraseña" >
+      </div>
+
       <button type="submit" class="btn">Guardar cambios</button>
     </form>
 

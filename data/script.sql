@@ -72,3 +72,5 @@ CREATE TABLE IF NOT EXISTS partides (
     FOREIGN KEY (usuari_id) REFERENCES usuaris(id) ON DELETE CASCADE,
     FOREIGN KEY (joc_id) REFERENCES jocs(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
