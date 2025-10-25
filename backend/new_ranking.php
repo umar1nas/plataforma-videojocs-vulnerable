@@ -13,9 +13,9 @@ if (!isset($_SESSION['usuario'])) {
 $sql = "
     SELECT 
         u.nom_usuari,
-        SUM(p.puntuacio_obtinguda) AS total_punts,
-        COUNT(p.id) AS partides_jugades
-    FROM partides p
+        SUM(p.puntuacio_maxima) AS total_punts,
+        COUNT(p.id) AS jocs_jugats
+    FROM progres_usuari p
     JOIN usuaris u ON p.usuari_id = u.id
     GROUP BY u.nom_usuari
     ORDER BY total_punts DESC;
@@ -72,7 +72,7 @@ $result = $conn->query($sql);
             <th>Posición</th>
             <th>Usuario</th>
             <th>Puntos Totales</th>
-            <th>Partidas Jugadas</th>
+            <th>Jocs Jugats</th>
         </tr>
         <?php
         if ($result->num_rows > 0) {
@@ -82,7 +82,7 @@ $result = $conn->query($sql);
                 echo "<td>" . $pos++ . "</td>";
                 echo "<td>" . htmlspecialchars($row['nom_usuari']) . "</td>";
                 echo "<td>" . $row['total_punts'] . "</td>";
-                echo "<td>" . $row['partides_jugades'] . "</td>";
+                echo "<td>" . $row['jocs_jugats'] . "</td>";
                 echo "</tr>";
             }
         } else {

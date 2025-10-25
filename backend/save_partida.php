@@ -6,7 +6,7 @@ header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 
-require "../../include/db_mysqli.php";
+require "./include/db_mysqli.php";
 
 $usuari_id = isset($_REQUEST['usuari_id']) ? (int)$_REQUEST['usuari_id'] : 0;
 $joc_id    = isset($_REQUEST['joc_id'])    ? (int)$_REQUEST['joc_id'] : 0;

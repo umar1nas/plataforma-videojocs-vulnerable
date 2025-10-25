@@ -24,15 +24,49 @@ if ($res_progres && $res_progres->num_rows > 0) {
     $nivell_actual = (int)$row['nivell_actual'];
 }
 
-// TODO: Obtener configuración desde la API
-// Por ahora, hardcodeado basado en los datos de la base de datos
-$niveles_config = [
-    1 => ['velocidad' => 5, 'obstaculos' => 10, 'puntuacio_minima' => 10, 'nom' => 'Nivel 1'],
-    2 => ['velocidad' => 6, 'obstaculos' => 15, 'puntuacio_minima' => 20, 'nom' => 'Nivel 2'],
-    3 => ['velocidad' => 7, 'obstaculos' => 20, 'puntuacio_minima' => 30, 'nom' => 'Nivel 3'],
-    4 => ['velocidad' => 8, 'obstaculos' => 25, 'puntuacio_minima' => 40, 'nom' => 'Nivel 4'],
-    5 => ['velocidad' => 9, 'obstaculos' => 30, 'puntuacio_minima' => 50, 'nom' => 'Nivel 5']
-];
+// Obtener configuración de todos los niveles desde la API
+$niveles_config = [];
+
+for ($i = 1; $i <= 5; $i++) {
+    $api_url = "http://" . $_SERVER['HTTP_HOST'] . "/api.php?jocs=" . $joc_id . "&nivells=" . $i;
+    
+    $response = @file_get_contents($api_url);
+    
+    if ($response !== false) {
+        $config_data = json_decode($response, true);
+        
+        if ($config_data && isset($config_data['velocidad']) && isset($config_data['obstaculos'])) {
+            $niveles_config[$i] = [
+                'velocidad' => (int)$config_data['velocidad'],
+                'obstaculos' => (int)$config_data['obstaculos'],
+                'puntuacio_minima' => isset($config_data['puntuacio_minima']) ? (int)$config_data['puntuacio_minima'] : ($i * 10),
+                'nom' => 'Nivel ' . $i
+            ];
+        }
+    }
+}
+
+// Fallback: Si la API falla, usar configuración por defecto
+if (empty($niveles_config)) {
+    $niveles_config = [
+        1 => ['velocidad' => 5, 'obstaculos' => 10, 'puntuacio_minima' => 10, 'nom' => 'Nivel 1'],
+        2 => ['velocidad' => 6, 'obstaculos' => 15, 'puntuacio_minima' => 20, 'nom' => 'Nivel 2'],
+        3 => ['velocidad' => 7, 'obstaculos' => 20, 'puntuacio_minima' => 30, 'nom' => 'Nivel 3'],
+        4 => ['velocidad' => 8, 'obstaculos' => 25, 'puntuacio_minima' => 40, 'nom' => 'Nivel 4'],
+        5 => ['velocidad' => 9, 'obstaculos' => 30, 'puntuacio_minima' => 50, 'nom' => 'Nivel 5']
+    ];
+}
+
+// Fallback: Si la API falla, usar configuración por defecto
+if (empty($niveles_config)) {
+    $niveles_config = [
+        1 => ['velocidad' => 5, 'obstaculos' => 10, 'puntuacio_minima' => 10, 'nom' => 'Nivel 1'],
+        2 => ['velocidad' => 6, 'obstaculos' => 15, 'puntuacio_minima' => 20, 'nom' => 'Nivel 2'],
+        3 => ['velocidad' => 7, 'obstaculos' => 20, 'puntuacio_minima' => 30, 'nom' => 'Nivel 3'],
+        4 => ['velocidad' => 8, 'obstaculos' => 25, 'puntuacio_minima' => 40, 'nom' => 'Nivel 4'],
+        5 => ['velocidad' => 9, 'obstaculos' => 30, 'puntuacio_minima' => 50, 'nom' => 'Nivel 5']
+    ];
+}
 
 $conn->close();
 ?>
@@ -218,17 +252,57 @@ $conn->close();
     </div>
 
     <script>
-
         // Configuración del juego desde PHP
         const USUARIO_ID = <?php echo $usuari_id; ?>;
-                console.log(USUARIO_ID);
-
         const JOC_ID = <?php echo $joc_id; ?>;
-                console.log(JOC_ID);
-
         let currentLevel = <?php echo $nivell_actual; ?>;
-
-        const nivelesConfig = <?php echo json_encode($niveles_config); ?>;
+        
+        // Objeto para almacenar la configuración de los niveles
+        let nivelesConfig = {};
+        
+        // Cargar configuración desde la API para todos los niveles (1-5)
+        async function cargarConfiguracionAPI() {
+            console.log("Cargando configuración desde la API...");
+            
+            for (let i = 1; i <= 5; i++) {
+                try {
+                    // Cambiar localhost por la IP de tu VM si es necesario
+                    const response = await fetch(`http://192.168.1.148/projecte/backend/api.php?jocs=${JOC_ID}&nivells=${i}`);
+                    const data = await response.json();
+                    
+                    console.log(`Respuesta API Nivel ${i}:`, data);
+                    
+                    // Guardar la configuración del nivel
+                    nivelesConfig[i] = {
+                        velocidad: data.velocidad || 5,
+                        obstaculos: data.obstaculos || 10,
+                        puntuacio_minima: data.puntuacio_minima || (i * 10),
+                        nom: `Nivel ${i}`
+                    };
+                    
+                    console.log(`Nivel ${i} - Velocidad: ${nivelesConfig[i].velocidad}, Obstáculos: ${nivelesConfig[i].obstaculos}, Puntuación mínima: ${nivelesConfig[i].puntuacio_minima}`);
+                    
+                } catch (error) {
+                    console.error(`Error cargando nivel ${i} desde API:`, error);
+                    // Fallback: configuración por defecto si la API falla
+                    nivelesConfig[i] = {
+                        velocidad: 4 + i,
+                        obstaculos: 5 + (i * 5),
+                        puntuacio_minima: i * 10,
+                        nom: `Nivel ${i}`
+                    };
+                }
+            }
+            
+            console.log("Configuración de niveles cargada:", nivelesConfig);
+            
+            // Una vez cargada la configuración, actualizar la UI
+            loadLevelConfig();
+        }
+        
+        // Cargar la configuración cuando se carga la página
+        cargarConfiguracionAPI();
+        
         // Canvas y contexto
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
@@ -430,12 +504,23 @@ $conn->close();
         }
         
         function savePartida(nivel, puntuacion, duracion) {
-            //const url = `../../backend/save_partida.php?usuari_id=${USUARIO_ID}&joc_id=${JOC_ID}&nivell=${nivel}&puntuacio=${puntuacion}&durada=${duracion}`;
-            const url = `save_partida.php?usuari_id=${USUARIO_ID}&joc_id=${JOC_ID}&nivell=${nivel}&puntuacio=${puntuacion}&durada=${duracion}`;
+            const url = `../../save_partida.php?usuari_id=${USUARIO_ID}&joc_id=${JOC_ID}&nivell=${nivel}&puntuacio=${puntuacion}&durada=${duracion}`;
+            
+            console.log('Guardando partida:', url);
+            
             fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Partida guardada:', data);
+                .then(response => {
+                    console.log('Response status:', response.status);
+                    return response.text(); // Primero obtener como texto
+                })
+                .then(text => {
+                    console.log('Response text:', text);
+                    try {
+                        const data = JSON.parse(text); // Intentar parsear como JSON
+                        console.log('Partida guardada:', data);
+                    } catch (e) {
+                        console.error('La respuesta no es JSON válido:', text);
+                    }
                 })
                 .catch(error => {
                     console.error('Error al guardar partida:', error);
@@ -531,4 +616,4 @@ $conn->close();
         }
     </script>
 </body>
-</html> 
+</html>

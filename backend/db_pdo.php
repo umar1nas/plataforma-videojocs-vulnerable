@@ -1,7 +1,7 @@
 <?php
 // db_pdo.php
 // Dades de connexió
-$servidor = '172.18.33.249';
+$servidor = 'localhost';
 $bd = 'plataforma_videojocs';
 $usuari = 'plataforma_user';
 $contrasenya = '123456789a';
