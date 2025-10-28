@@ -17,7 +17,7 @@ $juegos = [
     ['id' => 2, 'nombre' => 'Pong', 'emoji' => '🧠', 'url' => 'joc/2/pong.php'],
     ['id' => 3, 'nombre' => 'Trivia Quest', 'emoji' => '🎯', 'url' => 'juegos/trivia.php'],
     ['id' => 4, 'nombre' => 'Snake Attack', 'emoji' => '🐍', 'url' => 'joc/3/snake.php'],
-    ['id' => 5, 'nombre' => 'Flappy Bird', 'emoji' => '🐦', 'url' => 'joc/4/flappybird.php'],
+    ['id' => 5, 'nombre' => 'Flappy Bird', 'emoji' => '🐦', 'url' => 'joc/4/flapy2.php'],
     ['id' => 6, 'nombre' => '2048', 'emoji' => '🎮', 'url' => 'joc/5/2048.php']
 ];
 
@@ -102,7 +102,8 @@ $juegos = [
             const cards = document.querySelectorAll('.game-card');
             const cardWidth = cards[0].offsetWidth + 20; // incluir gap
 
-            if (direction === 'next') {
+            if (direction === 'next') {            const cardWidth = cards[0].offsetWidth + 20; // incluir gap
+
                 currentSlide += cardWidth;
                 if (currentSlide > cardWidth * (cards.length - 3)) {
                     currentSlide = 0;

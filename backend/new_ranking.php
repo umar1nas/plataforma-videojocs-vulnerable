@@ -1,6 +1,4 @@
 <?php
-
-
 session_start();
 require "./include/db_mysqli.php";
 
@@ -9,87 +7,169 @@ if (!isset($_SESSION['usuario'])) {
     exit;
 }
 
-// Consulta del ranking global
+// Consulta del ranking global (sin sanitizar, vulnerable a propósito)
 $sql = "
     SELECT 
         u.nom_usuari,
+        MAX(p.nivell_actual) AS nivell_maxim,
         SUM(p.puntuacio_maxima) AS total_punts,
-        COUNT(p.id) AS jocs_jugats
+        COUNT(p.id) AS jocs_jugats,
+        (MAX(p.nivell_actual) * 100 + SUM(p.puntuacio_maxima) - 100) AS puntuacio_final
     FROM progres_usuari p
     JOIN usuaris u ON p.usuari_id = u.id
     GROUP BY u.nom_usuari
-    ORDER BY total_punts DESC;
+    ORDER BY puntuacio_final DESC;
 ";
 
 $result = $conn->query($sql);
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Ranking General</title>
+    <title>Ranking General - NovaPlay</title>
     <style>
+        :root {
+            --bg: #0F172A;
+            --bg-grad: radial-gradient(circle at top right, rgba(124, 58, 237, 0.25), transparent 60%);
+            --card-bg: #1E293B;
+            --text-light: #F1F5F9;
+            --text-muted: #E2E8F0;
+            --accent-from: #A855F7;
+            --accent-to: #7C3AED;
+            --button: #8B5CF6;
+            --highlight: #10B981;
+            --pink: #D946EF;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background: #f7f7f7;
-            color: #333;
+            margin: 0;
+            font-family: "Inter", system-ui, sans-serif;
+            background: var(--bg);
+            background-image: var(--bg-grad);
+            color: var(--text-light);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-top: 50px;
+            padding: 40px;
         }
+
         h1 {
-            color: #222;
-        }
-        table {
-            border-collapse: collapse;
-            width: 60%;
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px 20px;
+            font-size: 28px;
+            background: linear-gradient(90deg, var(--accent-from), var(--accent-to));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
             text-align: center;
         }
+
+        .ranking-card {
+            width: 90%;
+            max-width: 800px;
+            background: var(--card-bg);
+            border-radius: 22px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+            border: 1px solid rgba(255,255,255,0.05);
+            overflow: hidden;
+            padding: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
         th {
-            background: #007BFF;
+            background: linear-gradient(90deg, var(--accent-from), var(--accent-to));
             color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 12px 15px;
         }
+
+        td {
+            text-align: center;
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-light);
+        }
+
         tr:nth-child(even) {
-            background: #f2f2f2;
+            background-color: rgba(255, 255, 255, 0.03);
         }
+
         tr:hover {
-            background: #e6f3ff;
+            background: rgba(124, 58, 237, 0.1);
+        }
+
+        .highlight {
+            color: var(--highlight);
+            font-weight: 700;
+        }
+
+        .footer {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .link {
+            color: var(--pink);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .link:hover {
+            text-decoration: underline;
+        }
+
+        .logo {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+
+        .user-row {
+            font-weight: 500;
         }
     </style>
 </head>
 <body>
-    <h1>🏆 Ranking General de Jugadores</h1>
-    <table>
-        <tr>
-            <th>Posición</th>
-            <th>Usuario</th>
-            <th>Puntos Totales</th>
-            <th>Jocs Jugats</th>
-        </tr>
-        <?php
-        if ($result->num_rows > 0) {
-            $pos = 1;
-            while($row = $result->fetch_assoc()) {
-                echo "<tr>";
-                echo "<td>" . $pos++ . "</td>";
-                echo "<td>" . htmlspecialchars($row['nom_usuari']) . "</td>";
-                echo "<td>" . $row['total_punts'] . "</td>";
-                echo "<td>" . $row['jocs_jugats'] . "</td>";
-                echo "</tr>";
+
+    <div class="logo">🏆</div>
+    <h1>Ranking General de Jugadores</h1>
+
+    <div class="ranking-card">
+        <table>
+            <tr>
+                <th>Posición</th>
+                <th>Usuario</th>
+                <th>Jocs Jugats</th>
+                <th>Puntuación Final</th>
+            </tr>
+
+            <?php
+            if ($result && $result->num_rows > 0) {
+                $pos = 1;
+                while($row = $result->fetch_assoc()) {
+                    echo "<tr class='user-row'>";
+                    echo "<td>" . $pos++ . "</td>";
+                    echo "<td>" . htmlspecialchars($row['nom_usuari']) . "</td>";
+                    echo "<td>" . $row['jocs_jugats'] . "</td>";
+                    echo "<td class='highlight'>" . $row['puntuacio_final'] . "</td>";
+                    echo "</tr>";
+                }
+            } else {
+                echo "<tr><td colspan='4'>No hi ha dades disponibles</td></tr>";
             }
-        } else {
-            echo "<tr><td colspan='4'>No hay datos disponibles</td></tr>";
-        }
-        ?>
-    </table>
+            ?>
+        </table>
+    </div>
+
+    <div class="footer">
+        <a href="plataforma.php" class="link">⬅ Tornar a la plataforma</a>
+    </div>
+
 </body>
 </html>
 
