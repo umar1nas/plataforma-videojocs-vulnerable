@@ -85,17 +85,10 @@ phpMyAdmin: http://localhost:8081/ (usuario: root, contraseña: rootpass)
 Para parar y limpiar:
 
 docker compose down -v
-📎 Archivo placeholder: www/script.php
+📎 Archivo: www/script.php
 
-
+------------ Ejecutar script
 <?php
-
-$title = 'LAMP ';
-?>
-
-
-<!doctype html>
-<html lang="es">
 SCRIPT
 </html>
 
