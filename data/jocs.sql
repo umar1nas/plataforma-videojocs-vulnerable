@@ -28,6 +28,7 @@ I-- INSERT INTO jocs (id, nom_joc, descripcio, puntuacio_maxima, nivells_totals,
 --  );
 
 -- Insertar niveles de Flappy Bird
+
 INSERT INTO nivells_joc (joc_id, nivell, nom_nivell, configuracio_json, puntuacio_minima)
 VALUES
 (4, 1, 'Nivel 1', JSON_OBJECT('velocidad', 5, 'obstaculos', 10), 10),
@@ -37,24 +38,5 @@ VALUES
 (4, 5, 'Nivel 5', JSON_OBJECT('velocidad', 9, 'obstaculos', 50), 50);
 
 
--- Insertar progreso del usuario (activo)
--- INSERT INTO progres_usuari (usuari_id, joc_id, nivell_actual, puntuacio_maxima, partides_jugades)
--- VALUES (
-   -- 2, -- ID del usuario recién insertado
-   -- 1, -- ID del juego
-   -- 2,  -- nivel actual
-  --  500, -- puntuación máxima
-  --  1 -- partidas jugadas
---  );
-
--- Insertar una partida jugada (activo)
--- INSERT INTO partides (usuari_id, joc_id, nivell_jugat, puntuacio_obtinguda, durada_segons)
--- VALUES (
---    2, -- usuario
---    1, -- juego
---    2, -- nivel
---    500, -- puntuación obtenida
---    275  -- duración en segundos
---  );
 
 

@@ -9,16 +9,14 @@ if (!isset($_SESSION['usuario'])) {
 
 // Consulta del ranking global (sin sanitizar, vulnerable a propósito)
 $sql = "
-    SELECT 
-        u.nom_usuari,
-        MAX(p.nivell_actual) AS nivell_maxim,
-        SUM(p.puntuacio_maxima) AS total_punts,
-        COUNT(p.id) AS jocs_jugats,
-        (MAX(p.nivell_actual) * 100 + SUM(p.puntuacio_maxima) - 100) AS puntuacio_final
-    FROM progres_usuari p
-    JOIN usuaris u ON p.usuari_id = u.id
-    GROUP BY u.nom_usuari
-    ORDER BY puntuacio_final DESC;
+SELECT 
+    u.nom_usuari,
+    SUM(p.nivell_actual * 100 + p.puntuacio_maxima) AS puntuacio_final_total,
+    COUNT(DISTINCT p.joc_id) AS jocs_jugats
+FROM progres_usuari p
+JOIN usuaris u ON p.usuari_id = u.id
+GROUP BY u.nom_usuari
+ORDER BY puntuacio_final_total DESC;
 ";
 
 $result = $conn->query($sql);
@@ -156,7 +154,7 @@ $result = $conn->query($sql);
                     echo "<td>" . $pos++ . "</td>";
                     echo "<td>" . htmlspecialchars($row['nom_usuari']) . "</td>";
                     echo "<td>" . $row['jocs_jugats'] . "</td>";
-                    echo "<td class='highlight'>" . $row['puntuacio_final'] . "</td>";
+                    echo "<td class='highlight'>" . $row['puntuacio_final_total'] . "</td>";
                     echo "</tr>";
                 }
             } else {

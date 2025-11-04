@@ -8,39 +8,8 @@ const fotogrames = 1000 / 60;
 // --------- Variables de configuració inicial ---------
 const jocId = window.jocConfig.jocId;
 const nivell = window.jocConfig.nivell;
+//const nomUsuari = "Pepeito";
 const nomUsuari = window.jocConfig.nomUsuari;
-const usuariId = window.jocConfig.usuariId;
-
-// Temps de partida
-let iniciPartida = Date.now();
-
-// Funció per guardar partida
-function savePartida(nivel, puntuacio, duracio) {
-  const url = `http://172.18.33.249/projecte/backend/save_partida.php?usuari_id=${usuariId}&joc_id=${jocId}&nivell=${nivel}&puntuacio=${puntuacio}&durada=${duracio}`;
-  
-  console.log('Guardant partida:', url);
-  
-  fetch(url)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.text();
-    })
-    .then(text => {
-      try {
-        const data = JSON.parse(text);
-        console.log('Partida guardada:', data);
-      } catch (e) {
-        console.log('Resposta del servidor:', text);
-      }
-    })
-    .catch(error => {
-      console.error('Error al guardar partida:', error);
-    });
-}
-
-
 
 // Cridem a la API amb les dades reals
 fetch(`http://172.18.33.249/projecte/backend/api.php?jocs=${jocId}&nivells=${nivell}`)
@@ -81,14 +50,11 @@ fetch(`http://172.18.33.249/projecte/backend/api.php?jocs=${jocId}&nivells=${niv
     }
 
     // ---- Info Partida ----
-    const elementNivell = document.createElement("p");
     const elementNom = document.createElement("p");
     const elementPunts = document.createElement("p");
     const elementDerribats = document.createElement("p");
     const elementVides = document.createElement("p");
 
-    elementNivell.innerHTML = `Nivell: ${nivell}`;
-    infoPartida.append(elementNivell);
     elementNom.innerHTML = `Jugador: ${jugador.nom}`;
     infoPartida.append(elementNom);
     elementPunts.innerHTML = `Punts: ${jugador.punts}`;
@@ -116,74 +82,26 @@ fetch(`http://172.18.33.249/projecte/backend/api.php?jocs=${jocId}&nivells=${niv
           enemic.x = pantallaAmple + enemic.ample;
           jugador.punts += (nivell * 10);
           jugador.derribats++;
-          infoPartida.querySelector("p:nth-child(3)").innerHTML = `Punts: ${jugador.punts}`;
-          infoPartida.querySelector("p:nth-child(4)").innerHTML = `Kills: ${jugador.derribats}`;
-          
-          // NIVELL SUPERAT!
+          infoPartida.querySelector("p:nth-child(2)").innerHTML = `Punts: ${jugador.punts}`;
+          infoPartida.querySelector("p:nth-child(3)").innerHTML = `Kills: ${jugador.derribats}`;
           if (jugador.punts >= maxPunts) {
-
-            fetch('http://172.18.33.249/projecte/backend/set_next_level.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `usuari_id=${usuariId}&joc_id=${jocId}&nivell=${nivell+1}`
-            })
-           .then(res => res.json())
-           .then(data => console.log(data));
             jugador.velocitat = 0;
             vectorEnemics.forEach(e => e.velocitat = 0);
-            vectorAsteroides.forEach(a => a.velocitat = 0);
-            
-            // Calcular durada de la partida (en segons)
-            const duracio = Math.floor((Date.now() - iniciPartida) / 1000);
-            
-            // Guardar la partida
-            savePartida(nivell, jugador.punts, duracio);
-            
-            // Actualitzar el nivell si no és el màxim
-            if (nivell < 5) {
-              
-              setTimeout(() => {
-                alert(`Nivell ${nivell} superat! 🎉\n\nPassant al nivell ${nivell + 1}...`);
-                location.reload();
-              }, 500);
-            } else {
-              // Joc completat!
-              setTimeout(() => {
-                alert(`Has completat tots els nivells! 🏆\n\nPuntuació final: ${jugador.punts}`);
-                window.location.href = '../../index.php';
-              }, 500);
-            }
+            alert("Nivell superat! :)");
           }
         }
       });
     }
 
     // ---- Bucle d'animació ----
-    const intervalId = setInterval(() => {
+    setInterval(() => {
       comprovarCollisions();
-      infoPartida.querySelector("p:nth-child(5)").innerHTML = `Vides: ${jugador.vides}`;
-      
-      // GAME OVER
-      if (jugador.vides <= 0) {
+      infoPartida.querySelector("p:nth-child(4)").innerHTML = `Vides: ${jugador.vides}`;
+      if (jugador.vides < 0) {
         jugador.velocitat = 0;
-        vectorEnemics.forEach(e => e.velocitat = 0);
-        vectorAsteroides.forEach(a => a.velocitat = 0);
-        clearInterval(intervalId);
-        
-        // Calcular durada de la partida
-        const duracio = Math.floor((Date.now() - iniciPartida) / 1000);
-        
-        // Guardar la partida (encara que s'hagi perdut)
-        savePartida(nivell, jugador.punts, duracio);
-        
-        setTimeout(() => {
-          alert(`Game Over! 💀\n\nPuntuació: ${jugador.punts}\nKills: ${jugador.derribats}`);
-          location.reload();
-        }, 500);
+        setTimeout(() => location.reload(), 5000);
       }
-      
-      jugador.dibuixar(); 
-      jugador.moure();
+      jugador.dibuixar(); jugador.moure();
       vectorEnemics.forEach(e => { e.dibuixar(); e.moure(); });
       vectorAsteroides.forEach(a => { a.dibuixar(); a.moure(); });
     }, fotogrames);

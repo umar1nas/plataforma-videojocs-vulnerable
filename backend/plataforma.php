@@ -13,11 +13,11 @@ $usuario = [
 ];
 
 $juegos = [
-    ['id' => 1, 'nombre' => 'Joc Complet', 'emoji' => '🧩', 'url' => 'joc/1/index.html'],
+    ['id' => 1, 'nombre' => 'Joc Complet', 'emoji' => '🧩', 'url' => 'joc/1/index.php'],
     ['id' => 2, 'nombre' => 'Pong', 'emoji' => '🧠', 'url' => 'joc/2/pong.php'],
-    ['id' => 3, 'nombre' => 'Trivia Quest', 'emoji' => '🎯', 'url' => 'juegos/trivia.php'],
+    ['id' => 3, 'nombre' => 'Space SHOOTER', 'emoji' => '🎯', 'url' => 'joc/6/shoot.php'],
     ['id' => 4, 'nombre' => 'Snake Attack', 'emoji' => '🐍', 'url' => 'joc/3/snake.php'],
-    ['id' => 5, 'nombre' => 'Flappy Bird', 'emoji' => '🐦', 'url' => 'joc/4/flapy2.php'],
+    ['id' => 5, 'nombre' => 'Flappy Bird', 'emoji' => '🐦', 'url' => 'joc/4/flappybird.php'],
     ['id' => 6, 'nombre' => '2048', 'emoji' => '🎮', 'url' => 'joc/5/2048.php']
 ];
 
