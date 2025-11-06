@@ -124,7 +124,7 @@ VALUES
 
 INSERT INTO jocs (id, nom_joc, descripcio, puntuacio_maxima, nivells_totals, actiu)
 VALUES 
-(1, 'Pong', 'El joc del PONG', 1000, 5, TRUE);
+(2, 'Pong', 'El joc del PONG', 1000, 5, TRUE);
 
 
 
@@ -132,7 +132,7 @@ VALUES
 
 INSERT INTO jocs (id, nom_joc, descripcio, puntuacio_maxima, nivells_totals, actiu)
 VALUES 
-(1, 'Snake', 'El joc del snake', 1000, 5, TRUE);
+(3, 'Snake', 'El joc del snake', 1000, 5, TRUE);
 
 
 
@@ -163,7 +163,7 @@ VALUES
 
 INSERT INTO jocs (id, nom_joc, descripcio, puntuacio_maxima, nivells_totals, actiu)
 VALUES 
-(1, '2048', 'El 2048', 1000, 5, TRUE);
+(5, '2048', 'El 2048', 1000, 5, TRUE);
 
 
 
@@ -172,4 +172,4 @@ VALUES
 
 INSERT INTO jocs (id, nom_joc, descripcio, puntuacio_maxima, nivells_totals, actiu)
 VALUES 
-(1, 'Shoot', 'El joc del shoot shoot shoot', 1000, 5, TRUE);
+(6, 'Shoot', 'El joc del shoot shoot shoot', 1000, 5, TRUE);
