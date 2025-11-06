@@ -13,6 +13,9 @@ $joc_id = 4; // ID del juego Flappy Bird
 
 // Obtener nivel actual del usuario desde la base de datos
 require_once "../../include/db_mysqli.php";
+require '../../../config.php';
+
+
 
 // Verificar si hay progreso del usuario
 $sql_progres = "SELECT nivell_actual FROM progres_usuari WHERE usuari_id = $usuari_id AND joc_id = $joc_id LIMIT 1";
@@ -361,10 +364,14 @@ $conn->close();
     </div>
 
     <script>
+        //IP DEL SERVIDOR
+
+  const baseIP = <?= json_encode($BASE_IP) ?>;
         // Configuración del juego desde PHP
         const USUARIO_ID = <?php echo $usuari_id; ?>;
         const JOC_ID = <?php echo $joc_id; ?>;
         let currentLevel = <?php echo $nivell_actual; ?>;
+
         
         // Objeto para almacenar la configuración de los niveles
         let nivelesConfig = {};
@@ -376,7 +383,7 @@ $conn->close();
     // ← Inyectamos el nivel actual desde PHP
 
     try {
-        const response = await fetch(`http://172.18.33.249/projecte/backend/api.php?jocs=${JOC_ID}&nivells=${currentLevel}`);
+        const response = await fetch(`http://${baseIP}/projecte/backend/api.php?jocs=${JOC_ID}&nivells=${currentLevel}`);
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -665,7 +672,7 @@ async function nextLevel() {
         }
         
         function savePartida(nivel, puntuacion, duracion) {
-            const url = `http://172.18.33.249/projecte/backend/save_partida.php?usuari_id=${USUARIO_ID}&joc_id=${JOC_ID}&nivell=${nivel}&puntuacio=${puntuacion}&durada=${duracion}`;
+            const url = `http://${baseIP}/projecte/backend/save_partida.php?usuari_id=${USUARIO_ID}&joc_id=${JOC_ID}&nivell=${nivel}&puntuacio=${puntuacion}&durada=${duracion}`;
             
             console.log('Guardando partida:', url);
             

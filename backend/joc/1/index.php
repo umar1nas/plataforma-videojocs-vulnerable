@@ -7,6 +7,8 @@ $joc_id = 1; // ID del juego
 $nom_usuari = $_SESSION['usuario'];
 
 require_once "../../include/db_mysqli.php";
+require '../../../config.php';
+
 
 // 🔍 Consultar el nivel actual del usuario
 $sql_progres = "SELECT nivell_actual FROM progres_usuari 
@@ -43,6 +45,7 @@ if ($res_progres && $res_progres->num_rows > 0) {
         nomUsuari: "<?php echo htmlspecialchars($nom_usuari, ENT_QUOTES); ?>",
         usuariId: <?php echo $usuari_id; ?>
       };
+      window.baseIP = "<?= $BASE_IP ?>";
       console.log("Config joc:", window.jocConfig);
     </script>
 

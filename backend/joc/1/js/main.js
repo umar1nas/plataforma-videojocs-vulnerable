@@ -1,3 +1,7 @@
+//IP DEL SERVIDOR PER FER PETICIONS
+
+const baseIP = window.baseIP
+
 // --------- Pantalla del Joc ---------
 const pantalla = document.querySelector("#pantalla");
 const infoPartida = document.querySelector("#infoPartida");
@@ -11,13 +15,14 @@ const nivell = window.jocConfig.nivell;
 const nomUsuari = window.jocConfig.nomUsuari;
 const usuariId = window.jocConfig.usuariId;
 
+
 // Temps de partida
 let iniciPartida = Date.now();
 
 // Funció per guardar partida
 function savePartida(nivel, puntuacio, duracio) {
-  const url = `http://172.18.33.249/projecte/backend/save_partida.php?usuari_id=${usuariId}&joc_id=${jocId}&nivell=${nivel}&puntuacio=${puntuacio}&durada=${duracio}`;
-  
+  const url = `http://${baseIP}/projecte/backend/save_partida.php?usuari_id=${usuariId}&joc_id=${jocId}&nivell=${nivel}&puntuacio=${puntuacio}&durada=${duracio}`;
+
   console.log('Guardant partida:', url);
   
   fetch(url)
@@ -43,7 +48,8 @@ function savePartida(nivel, puntuacio, duracio) {
 
 
 // Cridem a la API amb les dades reals
-fetch(`http://172.18.33.249/projecte/backend/api.php?jocs=${jocId}&nivells=${nivell}`)
+fetch(`http://${baseIP}/projecte/backend/api.php?jocs=${jocId}&nivells=${nivell}`)
+
   .then(res => res.json())
   .then(data => {
     console.log("Resposta API:", data);
@@ -122,7 +128,8 @@ fetch(`http://172.18.33.249/projecte/backend/api.php?jocs=${jocId}&nivells=${niv
           // NIVELL SUPERAT!
           if (jugador.punts >= maxPunts) {
 
-            fetch('http://172.18.33.249/projecte/backend/set_next_level.php', {
+          fetch(`http://${baseIP}/projecte/backend/set_next_level.php`, {
+
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: `usuari_id=${usuariId}&joc_id=${jocId}&nivell=${nivell+1}`

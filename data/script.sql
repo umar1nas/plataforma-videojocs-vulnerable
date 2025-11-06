@@ -74,3 +74,102 @@ CREATE TABLE IF NOT EXISTS partides (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+-- Insertar un juego JOC 1
+INSERT INTO jocs (id, nom_joc, descripcio, puntuacio_maxima, nivells_totals, actiu)
+VALUES 
+(1, 'Las navecitas', 'Joc de acció on el jugador controla una nau que ha de evitar asteroides i derrotar enemics per superar nivells.', 1000, 5, TRUE);
+
+-- Insertar niveles para "Las navecitas"
+
+INSERT INTO nivells_joc (joc_id, nivell, nom_nivell, configuracio_json, puntuacio_minima)
+VALUES
+(1, 1, 'Nivell 1', JSON_OBJECT(
+  'vides', 3,
+  'puntsNivell', 100,
+  'maxEnemics', 5,
+  'maxAsteroides', 30
+), 100),
+
+(1, 2, 'Nivell 2', JSON_OBJECT(
+  'vides', 3,
+  'puntsNivell', 200,
+  'maxEnemics', 8,
+  'maxAsteroides', 40
+), 200),
+
+(1, 3, 'Nivell 3', JSON_OBJECT(
+  'vides', 3,
+  'puntsNivell', 300,
+  'maxEnemics', 10,
+  'maxAsteroides', 60
+), 300),
+
+(1, 4, 'Nivell 4', JSON_OBJECT(
+  'vides', 2,
+  'puntsNivell', 400,
+  'maxEnemics', 12,
+  'maxAsteroides', 80
+), 400),
+
+(1, 5, 'Nivell 5', JSON_OBJECT(
+  'vides', 1,
+  'puntsNivell', 500,
+  'maxEnemics', 15,
+  'maxAsteroides', 100
+), 500);
+
+
+-- Insertar un juego JOC 2
+
+
+INSERT INTO jocs (id, nom_joc, descripcio, puntuacio_maxima, nivells_totals, actiu)
+VALUES 
+(1, 'Pong', 'El joc del PONG', 1000, 5, TRUE);
+
+
+
+-- Insertar un juego JOC 3
+
+INSERT INTO jocs (id, nom_joc, descripcio, puntuacio_maxima, nivells_totals, actiu)
+VALUES 
+(1, 'Snake', 'El joc del snake', 1000, 5, TRUE);
+
+
+
+-- Insertar un juego JOC 4
+ INSERT INTO jocs (id, nom_joc, descripcio, puntuacio_maxima, nivells_totals, actiu)
+  VALUES (
+   4,
+  'Flappy Bird',
+  'El clásico juego donde el pájaro debe esquivar los obstáculos.',
+   1000,
+   5,
+   TRUE 
+);
+
+
+INSERT INTO nivells_joc (joc_id, nivell, nom_nivell, configuracio_json, puntuacio_minima)
+VALUES
+(4, 1, 'Nivel 1', JSON_OBJECT('velocidad', 5, 'obstaculos', 10), 10),
+(4, 2, 'Nivel 2', JSON_OBJECT('velocidad', 6, 'obstaculos', 20), 20),
+(4, 3, 'Nivel 3', JSON_OBJECT('velocidad', 7, 'obstaculos', 30), 30),
+(4, 4, 'Nivel 4', JSON_OBJECT('velocidad', 8, 'obstaculos', 40), 40),
+(4, 5, 'Nivel 5', JSON_OBJECT('velocidad', 9, 'obstaculos', 50), 50);
+
+
+
+
+-- Insertar un juego JOC 5
+
+INSERT INTO jocs (id, nom_joc, descripcio, puntuacio_maxima, nivells_totals, actiu)
+VALUES 
+(1, '2048', 'El 2048', 1000, 5, TRUE);
+
+
+
+
+-- Insertar un juego JOC 6
+
+INSERT INTO jocs (id, nom_joc, descripcio, puntuacio_maxima, nivells_totals, actiu)
+VALUES 
+(1, 'Shoot', 'El joc del shoot shoot shoot', 1000, 5, TRUE);
