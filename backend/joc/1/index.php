@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['usuario'])) {
+    header('Location: ../index.php'); // o donde esté el login
+    exit;
+}
 
 // ⚙️ Configuració inicial
 $usuari_id = $_SESSION['usuari_id']; // ID del usuario en sesión

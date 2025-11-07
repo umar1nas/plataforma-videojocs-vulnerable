@@ -1,4 +1,10 @@
 <?php
+session_start();
+if (!isset($_SESSION['usuario'])) {
+    header('Location: ../index.php'); // o donde esté el login
+    exit;
+}
+
 // Simulamos datos del juego
 $juego_info = [
     'nombre' => '2048',

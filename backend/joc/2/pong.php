@@ -1,6 +1,12 @@
 <?php
 // Supongamos que el usuario ya inició sesión:
 $usuario = "Jugador1"; // aquí iría $_SESSION['usuario'] o similar
+session_start();
+if (!isset($_SESSION['usuario'])) {
+    header('Location: ../index.php'); // o donde esté el login
+    exit;
+}
+
 ?>
 
 <!DOCTYPE html>

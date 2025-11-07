@@ -4,9 +4,11 @@ error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
 // Verificar sesión del usuario
-if (!isset($_SESSION['usuari_id'])) {
-    die('Error: No hay sesión activa. Por favor inicia sesión primero.');
+if (!isset($_SESSION['usuario'])) {
+    header('Location: ../index.php'); // o donde esté el login
+    exit;
 }
+
 
 $usuari_id = $_SESSION['usuari_id'];
 $joc_id = 4; // ID del juego Flappy Bird

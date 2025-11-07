@@ -1,5 +1,11 @@
 <?php
-$usuario = "Jugador1";
+session_start();
+if (!isset($_SESSION['usuario'])) {
+    header('Location: ../index.php'); // o donde esté el login
+    exit;
+}
+
+$usuario =$_SESSION['usuario'];
 ?>
 
 <!DOCTYPE html>
