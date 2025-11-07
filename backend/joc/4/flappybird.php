@@ -5,7 +5,7 @@ ini_set('display_errors', '1');
 
 // Verificar sesión del usuario
 if (!isset($_SESSION['usuario'])) {
-    header('Location: ../index.php'); // o donde esté el login
+    header('Location: ../../../index.php'); // o donde esté el login
     exit;
 }
 
