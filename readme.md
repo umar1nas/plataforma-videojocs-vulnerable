@@ -1,103 +1,81 @@
-🚀 LAMP  —  Docker 
+# Instalación rápida — Plataforma videojuegos vulnerable
 
-README completo y visual para levantar un entorno LAMP aislado con Docker Compose.
+Este README explica **rápidamente** cómo descargar y ejecutar el script `setup_plataforma.sh`, dar permisos, arrancarlo con `sudo` y cómo configurar la IP del servicio en `config.php` (variable `$BASE_IP`).
 
-🎯 Objetivo
+> **URL del script (raw):**
+> `https://raw.githubusercontent.com/umar1nas/plataforma-videojocs-vulnerable/refs/heads/main/setup_plataforma.sh`
 
-Levantar rápidamente un entorno LAMP (Apache + PHP + MySQL) usando Docker Compose, con una carpeta www/. Listo para arrancar plataforma de juegos
+---
 
-📁 Estructura del proyecto
-/lamp
-│
-├─ docker-compose.yml
-├─ php.ini           # 
-├─ www/              #
-│   └─ script.php    # script plataforma de juegos
-└─ README.md         # este archivo
-🧩 ¿Por qué usar Docker?
+## 1) Descargar el script (wget o curl)
 
-Aislamiento: no tocas tu sistema base.
+Con `wget`:
 
-Fácil de levantar y eliminar (up / down -v).
+```bash
+wget -O setup_plataforma.sh "https://raw.githubusercontent.com/umar1nas/plataforma-videojocs-vulnerable/refs/heads/main/setup_plataforma.sh"
+```
 
-Reproducible: funciona igual en cualquier máquina con Docker.
+Con `curl`:
 
-📦 docker-compose.yml (coloca este en la raíz)
-version: '3.8'
-services:
-  web:
-    image: php:8.1-apache
-    container_name: lamp_web
-    volumes:
-      - ./www:/var/www/html:delegated
-      - ./php.ini:/usr/local/etc/php/php.ini
-    ports:
-      - "8080:80"
-    depends_on:
-      - db
+```bash
+curl -L -o setup_plataforma.sh "https://raw.githubusercontent.com/umar1nas/plataforma-videojocs-vulnerable/refs/heads/main/setup_plataforma.sh"
+```
+
+---
+
+## 2) Dar permisos de ejecución
+
+```bash
+chmod +x setup_plataforma.sh
+```
+
+---
+
+## 3) Ejecutar (usar **bash** y **sudo**)
+
+Para evitar errores con `/bin/sh` (p. ej. `pipefail`), ejecuta con `bash`:
+
+```bash
+sudo bash ./setup_plataforma.sh
+```
+
+El script instalará Apache2, PHP, MariaDB, clonará el repositorio y **tendrá como ruta por defecto**:
+`/var/www/html/projecte`
+
+---
+
+## 4) Configurar la IP del servicio en `config.php`
+
+Después de la instalación, edita el fichero `config.php` dentro del repo clonado para establecer la IP en la variable `$BASE_IP`.
+
+Ruta (ejemplo):
+
+```
+/var/www/html/rojecte/config.php
+```
+
+Abrir con `nano`:
+
+```bash
+sudo nano /var/www/projecte/config.php
+```
+
+Busca la línea que contiene `$BASE_IP` y pon tu IP entre comillas, por ejemplo:
+
+```php
+$BASE_IP = '192.168.1.10';
+```
+
+Guarda y cierra (en `nano`: `Ctrl+O` luego `Enter`, `Ctrl+X`).
+
+---
+
+## 5) Comprobación final
+
+* Accede desde tu navegador: `http://<IP-del-servidor>/` o `http://localhost` si trabajas localmente.
 
 
-  db:
-    image: mysql:5.7
-    container_name: lamp_db
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpass
-      MYSQL_DATABASE: gamedb
-      MYSQL_USER: gamer
-      MYSQL_PASSWORD: gamerpass
-    volumes:
-      - dbdata:/var/lib/mysql
+## Notas / consejos rápidos
 
+* Asegúrate de ejecutar el script con `bash` (no con `sh`) para evitar el error `set: Illegal option -o pipefail`.
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: lamp_pma
-    environment:
-      PMA_HOST: db
-      PMA_USER: root
-      PMA_PASSWORD: rootpass
-    ports:
-      - "8081:80"
-
-
-volumes:
-  dbdata:
-🛠️ Paso a paso (rápido)
-
-Instala Docker y Docker Compose si no los tienes.
-
-Clona este repo o crea la estructura mostrada arriba.
-
-Crea la carpeta www/ si no existe: mkdir -p www.
-
-Dentro de www/ encontrarás script.php con contenido para desplegar plataforma de juegos 
-
-Levanta el stack:
-
-docker compose up -d
-
-Accede en el navegador:
-
-Web: http://localhost:8080/
-
-phpMyAdmin: http://localhost:8081/ (usuario: root, contraseña: rootpass)
-
-Para parar y limpiar:
-
-docker compose down -v
-📎 Archivo: www/script.php
-
------------- Ejecutar script
-<?php
-SCRIPT
-</html>
-
-🧰 Comandos útiles
-
-Ver contenedores: docker compose ps
-
-Logs web: docker logs -f lamp_web
-
-Acceder al contenedor web: docker exec -it lamp_web bash
-
-Eliminar contenedores y volúmenes: docker compose down -v
